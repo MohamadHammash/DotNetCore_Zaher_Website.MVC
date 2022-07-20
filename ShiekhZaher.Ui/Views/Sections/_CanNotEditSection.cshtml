@@ -1,0 +1,16 @@
+﻿@model EditSectionViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "خطأ";
+}
+
+<div class="text-center text-danger h1 mt-5">
+    <p>
+        لا يمكن تعديل هذا العنصر
+    </p>
+</div>
+
+<div class="form-group mt-2">
+    <a class="btn btn-secondary" asp-controller="FBooks" asp-action="Details" asp-route-id="@Model.FBookId">العودة إلى القسم</a>
+    <a class="btn btn-secondary" asp-controller="Sections" asp-action="Details" asp-route-id="@Model.Id">إلى الباب</a>
+</div>

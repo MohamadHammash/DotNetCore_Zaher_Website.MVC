@@ -1,0 +1,81 @@
+﻿@model EditQAViewModel
+@inject ISelectServices service
+@{
+    ViewData["Title"] = "تعديل سؤال";
+    //Layout = "_QaLayOut";
+}
+@{
+    var span = String.IsNullOrWhiteSpace(Model.Question) ? 999 : 999 - Model.Question.Count();
+}
+
+<div class="container mt-5">
+
+    <form asp-action="Edit">
+
+        <div class="mb-3 mt-5 rtl-direction">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" type="text" class="form-control" id="edit-questioner-name">
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3 rtl-direction">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" type="text" class="form-control" id="edit-questioner-last-name">
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="mb-3 rtl-direction">
+            <label asp-for="Subject" class="form-label"> </label>
+            <input asp-for="Subject" type="text" class="form-control" id="edit-question-subject">
+            <span asp-validation-for="Subject" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 rtl-direction">
+            <label asp-for="Question" class="form-label"></label>
+            <textarea asp-for="Question" class="form-control" id="edit-question" rows="3" onkeyup="LimtCharacters(this,999,'edit-remaining-chars');"></textarea>
+            <span asp-validation-for="Question" class="text-danger"></span>
+
+            <p class="p-remaining-chars"> الحروف المتبقية : <span id="edit-remaining-chars">@span</span></p>
+        </div>
+
+        <div class="form-control mb-3">
+            <select asp-for="SectionId" asp-items="@await service.GetSectionsIdAsync()" class="form-select">
+            </select>
+            <span asp-validation-for="SectionId" class="text-danger"></span>
+        </div>
+
+
+        <script type="text/javascript">
+            function LimtCharacters(txtMsg, CharLength, indicator) {
+                chars = txtMsg.value.length;
+                document.getElementById(indicator).innerHTML = CharLength - chars;
+                if (chars > CharLength) {
+                    txtMsg.value = txtMsg.value.substring(0, CharLength);
+                }
+            }
+        </script>
+
+
+
+        @if (!String.IsNullOrEmpty(Model.Answer))
+        {
+
+            <div class="mb-3 text-center">
+                <label asp-for="Answer" class="form-label h3 "></label>
+                <textarea asp-for="Answer" class="form-control" id="edit-answer" rows="3"></textarea>
+                <span asp-validation-for="Answer" class="text-danger"></span>
+                <script type="text/javascript">
+                    CKEDITOR.replace('edit-answer');
+                </script>
+            </div>
+            <script type="text/javascript">
+                CKEDITOR.replace('qa-answer');
+            </script>
+        }
+
+        <input class="btn btn-primary" type="submit" value="حفظ" />
+        <a asp-controller="Sections" asp-action="Details" asp-route-id="@Model.SectionId" class="btn btn-secondary">العودة إلى الأسئلة</a>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

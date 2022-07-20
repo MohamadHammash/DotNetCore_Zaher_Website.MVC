@@ -1,0 +1,30 @@
+﻿@model DeletePostingCardViewModel
+
+@{
+    ViewData["Title"] = "إزالة بطاقة";
+}
+
+<h1>هل أنت متأكد من أنك تريد إزالة البطاقة؟</h1>
+<div>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Header)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Header)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PublishingDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PublishingDate)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="إزالة" class="btn btn-danger" />
+        <a class="btn btn-secondary" asp-action="Index">العودة إلى قائمة البطاقات</a>
+    </form>
+</div>

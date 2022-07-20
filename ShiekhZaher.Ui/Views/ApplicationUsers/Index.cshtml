@@ -1,0 +1,46 @@
+﻿@model PaginationResult<ListApplicationUsersViewModel>
+
+@{
+    ViewData["Title"] = "المستخدمين";
+}
+
+<div class="row my-5 row-cols-1 row-cols-md-3 g-4">
+     @foreach (var user in Model.Results)
+    {
+        
+    <div class="col">
+
+
+        <div class="card h-100">
+
+            <div class="card-body">
+                <h5 class="card-title">@user.FullName</h5>
+                <p class="text-muted">@RolesInArabic.ConvertRoleIntoArabic(user.Role)</p>
+
+                <a title="أرسل ايميل" href="mailto:@user.Email">
+                    <p class="card-text text-info"><i class="far fa-envelope me-3"></i>@user.Email</p>
+                </a>
+                @if (!String.IsNullOrWhiteSpace(user.PhoneNumber))
+               {
+                <a title="اتصل" href="tel:@user.PhoneNumber">
+
+                    <p class="card-text"><i class="fas fa-mobile-alt me-3"></i>@user.PhoneNumber</p>
+                </a>
+               }
+                <div class="my-3">
+
+                    <a asp-controller="ApplicationUsers" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-secondary">تعديل</a>
+                    <a asp-controller="ApplicationUsers" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">إزالة</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    }
+
+</div>
+
+<div class="mt-3">
+    @(await Component.InvokeAsync<PaginationViewComponent>(Model))
+</div>

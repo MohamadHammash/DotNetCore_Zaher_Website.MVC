@@ -1,0 +1,28 @@
+﻿@model DetailsPostingCardViewModel
+
+@{
+    ViewData["Title"] = Model.Header;
+}
+
+@{
+    var path = (String.IsNullOrWhiteSpace(Model.ImagePath) ? $"/Assets/tawoos.jpeg" : $"/Uploads/{Model.ImagePath}");
+}
+
+<div class="details-pc-container">
+    <div class="details-pc-row">
+        <div class="details-pc-column-33">
+            <img src="@path" width="335" height="471">
+        </div>
+        <div class="details-pc-column-66 rtl-direction">
+            @Html.Raw(Model.Content)
+        </div>
+    </div>
+</div>
+
+<div>
+    @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Editor))
+    {
+    <a class="btn btn-secondary me-3" asp-action="Edit" asp-route-id="@Model.Id">تعديل</a>
+    }
+    <a class="btn btn-secondary" asp-action="Index">العودة إلى قائمة البطاقات</a>
+</div>

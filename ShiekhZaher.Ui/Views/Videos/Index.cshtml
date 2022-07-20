@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ListVideosViewModel>
+@inject ISelectVideosListId selectVlId
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>جميع مقاطع الفيديو</h1>
+
+<p>
+    <a asp-action="Create">إضافة فيديو جديد</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.URL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VideosList)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.URL)
+                </td>
+                <td>
+                    @selectVlId.GetVideosListIdAsync().Result.Where(v => v.Value == item.VideosListId.ToString()).FirstOrDefault().Text
+                </td>
+                <td>
+                    <a class="me-5" asp-action="Edit" asp-route-id="@item.Id"> <i class="fas fa-edit"></i> </a>
+
+                    <a class="me-5" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info-circle"></i></a>
+
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

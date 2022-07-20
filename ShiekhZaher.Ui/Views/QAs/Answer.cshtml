@@ -1,0 +1,41 @@
+﻿@model AnswerQAViewModel
+@inject ISelectServices service
+@{
+    ViewData["Title"] = "إجابة على السؤال";
+
+}
+
+<div class="container mt-5">
+
+    <form asp-action="Answer">
+
+        <div class="mb-3 text-center rtl-direction">
+            <label asp-for="Answer" class="form-label h3 "></label>
+            <textarea asp-for="Answer" class="form-control" id="edit-answer" rows="3"></textarea>
+            <span asp-validation-for="Answer" class="text-danger"></span>
+            <script type="text/javascript">
+                CKEDITOR.replace('edit-answer');
+            </script>
+        </div>
+        <script type="text/javascript">
+            CKEDITOR.replace('qa-answer');
+        </script>
+
+        <div class="form-control rtl-direction">
+            <select asp-for="SectionId" asp-items="@await service.GetSectionsIdAsync()" class="form-select">
+            </select>
+            <span asp-validation-for="SectionId" class="text-danger"></span>
+        </div>
+
+        <div class="my-3 rtl-direction">
+            <input class="btn btn-primary" type="submit" value="أرسل الإجابة" />
+            <a asp-controller="Sections" asp-action="Details" asp-route-id="@Model.SectionId" class="btn btn-secondary">العودة إلى الأسئلة</a>
+            <a asp-controller="FBooks" asp-action="Create" target="_blank" class="btn btn-secondary">انشاء قسم جديد</a>
+            <a asp-controller="Sections" asp-action="Create" target="_blank" class="btn btn-secondary">انشاء باب جديد</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

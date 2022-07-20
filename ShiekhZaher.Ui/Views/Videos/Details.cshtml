@@ -1,0 +1,36 @@
+﻿@model DetailsVideoViewModel
+@inject ISelectVideosListId selectVlId
+@{
+    ViewData["Title"] = "Details";
+}
+@* ToDo: To Be Deleted *@
+<h1>تفاصيل المقطع</h1>
+
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.URL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.URL)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.VideosList)
+        </dt>
+        <dd class="col-sm-10">
+            @selectVlId.GetVideosListIdAsync().Result.Where(v => v.Value == Model.VideosListId.ToString()).FirstOrDefault().Text
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">تعديل المقطع</a> |
+    <a asp-controller="VideosList" asp-action="Details" asp-route-id="@Model.VideosListId">الرجوع إلى قائمة التشغيل</a>
+</div>

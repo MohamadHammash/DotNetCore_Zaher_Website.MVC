@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav ms-lg-5">
+
+
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        
+        <li class="nav-item">
+         
+            <a class="nav-link " asp-area="Identity" asp-page="/Account/Manage/Index" title="حسابي"><i class="far fa-user-circle big-icon"></i></a>
+        </li>
+        <li class="nav-item">
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "FBooks", new { area = "" })">
+               
+                <button title="تسجيل الخروج"  type="submit" class="nav-link btn btn-link"><i class="fas fa-sign-out-alt big-icon"></i></button>
+            </form>
+        </li>
+        @if (User.IsInRole(Roles.SuperAdmin))
+        {
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link " title="تسجيل مستخدم جديد" asp-area="Identity" asp-page="/Account/Register"><i class="fas fa-user-plus big-icon"></i></a>
+            </li>
+
+             <li class="nav-item ms-lg-3">
+                <a class="nav-link " title="إدارة المستخدمين" asp-controller="ApplicationUsers" asp-action="Index"><i class="fas fa-user-cog"></i></a>
+            </li>
+        }
+    }
+    @*ToDo : remove this*@
+    
+    else
+    {
+       @* 
+        <li class="nav-item">
+            <a class="nav-link text-light" title="تسجيل الدخول" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt big-icon"></i></a>
+        </li>*@
+    }
+</ul>

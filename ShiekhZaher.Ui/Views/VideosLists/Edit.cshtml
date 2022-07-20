@@ -1,0 +1,27 @@
+﻿@model EditVideosListViewModel
+
+@{
+    ViewData["Title"] = "تعديل القائمة";
+}
+
+<div class="row mt-3">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group mb-3 rtl-direction">
+                <label asp-for="ListName" class="control-label"></label>
+                <input asp-for="ListName" class="form-control" />
+                <span asp-validation-for="ListName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="حفظ" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">العودة إلى قوائم التشغيل</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,17 @@
+﻿@model DeletePostingCardViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "خطأ";
+}
+
+<div class="text-center text-danger h1 mt-5">
+    <p>
+        لا يمكن إزالة هذا العنصر , يمكنك فقط إزالة العناصر التي قمت أنت بإضافتها
+    </p>
+</div>
+
+<div class="form-group mt-2">
+    <a class="btn btn-secondary" asp-controller="PostingCards" asp-action="Index">العودة إلى قائمة البطاقات</a>
+    <a class="btn btn-secondary" asp-controller="PostingCards" asp-action="Details" asp-route-id="@Model.Id">العودة إلى البطاقة</a>
+</div>

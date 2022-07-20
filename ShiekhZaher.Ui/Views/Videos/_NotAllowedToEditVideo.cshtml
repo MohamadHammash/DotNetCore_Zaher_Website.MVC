@@ -1,0 +1,17 @@
+﻿@model EditVideoViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "خطأ";
+}
+
+<div class="text-center text-danger h1 mt-5">
+    <p>
+        لا يمكن تعديل هذا العنصر , يمكنك فقط تعديل العناصر التي قمت أنت بإضافتها
+    </p>
+</div>
+
+<div class="form-group mt-2">
+    <a class="btn btn-secondary" asp-controller="VideosLists" asp-action="Details" asp-route-id="@Model.VideosListId">العودة إلى قائمة الفيديوهات</a>
+    <a class="btn btn-secondary" asp-controller="VideosLists" asp-action="Index">العودة إلى قوائم التشغيل</a>
+</div>

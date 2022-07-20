@@ -1,0 +1,37 @@
+﻿@model DeleteSectionViewModel
+
+@{
+    ViewData["Title"] = "إزالة الباب";
+}
+
+<h3 class="text-danger">هل أنت متأكد من أنك تريد إزالة هذا الباب؟؟</h3>
+<h4 class="text-danger">إزالة الباب ستؤدي إلى إزالة جميع  الأسئلة التي بداخله</h4>
+<div>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FBookId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FBook.Title)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="إزالة" class="btn btn-danger" />
+        <a class="btn btn-secondary" asp-controller="FBooks" asp-action="Details" asp-route-id="@Model.FBookId">العودة إلى القسم</a>
+    </form>
+</div>

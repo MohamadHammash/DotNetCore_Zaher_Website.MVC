@@ -1,0 +1,381 @@
+﻿@model IndexSectionsViewModel
+@inject ISelectServices service
+@{
+    ViewData["Title"] = $"أبواب {Model.FBookTitle}";
+
+}
+
+<div class="row mt-3">
+    @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+    {
+
+        <div class="col-12 text-center">
+
+            <p>
+                <a class="btn btn-xl btn-primary" asp-controller="Sections" asp-action="Create" asp-route-fbookId="@Model.FBookId">انشاء باب جديد</a>
+            </p>
+        </div>
+    }
+</div>
+
+<section class="search-sec mt-5">
+    <div class="container">
+        <form>
+            <input type="hidden" name="fbookId" value="@Model.FBookId" />
+            <div class="row justify-content-md-end justify-content-between align-items-center">
+
+                <div class="col-8 col-md-10 justify-content-end me-2 me-md-0">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6 col-12 px-0">
+                            <input name="search" type="text" class="form-control  search-slt" placeholder="ابحث عن مادة في القسم">
+                        </div>
+                        <div class="col-md-5 col-12 px-0">
+
+                            <select name="type" asp-items="@service.GetSearchTypeSections()" class="form-select form-select-lg">
+                            </select>
+                        </div>
+                        <div class="col-md-1 col-2 mt-2 mt-md-0 px-0">
+                            <button type="submit" class="btn btn-primary wrn-btn">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 col-md-2">
+
+                    <a class="btn btn-primary" asp-controller="QAs" asp-action="Create">أرسل سؤالك</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<div class="sections-wrapper">
+    <h1 class="sections-h1">@Model.FBookTitle</h1>
+
+
+
+    @if (!string.IsNullOrWhiteSpace(Model.SearchBox))
+    {
+        if (Model.Type == "QAs")
+        {
+
+            <div class="accordion qa-accordion-container" id="qa-accordion-container">
+
+                @foreach (var qa in Model.QAs.Results)
+                {
+
+                    <h2 class="accordion-header" id="heading-@qa.Id">
+                        <button class="col-10 m-1 btn btn-brown" type="button" data-bs-toggle="collapse" data-bs-target="#question--@qa.Id" aria-expanded="true" aria-controls="question-1">
+                            سؤال يتعلق بـ   " @qa.Subject "
+                            <span>
+
+                                سأله الأخ/ت :  @($"{qa.FirstName} {qa.LastName}")
+                            </span>
+
+                            <span class="text-end qa-drop-span">
+                                <i class="fas fa-caret-down"></i>
+                            </span>
+                        </button>
+                        @if (qa.Answered)
+                        {
+                            <span class="text-success">
+
+                                <i data-toggle="tooltip" title="تمت الإجابة بفضل الله" class="far fa-check-circle"></i>
+                            </span>
+                            <span class="tooltip bs-tooltip-top" role="tooltip">
+                                <span class="arrow"></span>
+                                <span class="tooltip-inner">
+                                    تمت الإجابة بفضل الله
+                                </span>
+                            </span>
+
+                        }
+                        else
+                        {
+
+                            <span class="text-primary">
+
+                                <i data-toggle="tooltip" title="لم يتم الإجابة بعد" class="fas fa-circle-notch fa-spin"></i>
+                            </span>
+                            <span class="tooltip bs-tooltip-top" role="tooltip">
+                                <span class="arrow"></span>
+                                <span class="tooltip-inner">
+                                    لم يتم الإجابة بعد
+                                </span>
+                            </span>
+                        }
+                    </h2>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span>
+                            @if (qa.Answered)
+                            {
+                                @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+                                {
+                                    <a asp-controller="QAs" asp-action="Edit" asp-route-id="@qa.Id"> <i class="fas fa-edit me-3"></i> </a>
+                                    <a asp-controller="QAs" asp-action="Delete" asp-route-id="@qa.Id"><i class="fas fa-trash"></i></a>
+                                }
+
+                            }
+                            else
+                            {
+                                @if ((User.IsInRole(Roles.SuperAdmin)) || (User.IsInRole(Roles.Admin)))
+                                {
+                                    <a asp-controller="QAs" asp-action="Edit" asp-route-id="@qa.Id"> <i class="fas fa-edit me-1"></i> </a>
+                                    <a asp-controller="QAs" asp-action="Delete" asp-route-id="@qa.Id"><i class="fas fa-trash me-1"></i></a>
+                                    <a asp-controller="QAs" asp-action="Answer" asp-route-id="@qa.Id"><i class="fas fa-file-signature"></i></a>
+                                    <a asp-controller="QAs" asp-action="MoveToBeChecked" asp-route-id="@qa.Id"><i class="fas fa-eye-slash"></i></a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="QAs" asp-action="MoveToBeChecked" asp-route-id="@qa.Id"><i class="fas fa-eye-slash"></i></a>
+                                }
+                            }
+                        </span>
+                    }
+
+                    <div id="question--@qa.Id" class="accordion-collapse collapse" aria-labelledby="heading--@qa.Id" data-bs-parent="#qa-accordion-container">
+                        <div class="accordion-body">
+                            <section class="u-clearfix u-section-1" id="sec-d96a">
+                                <div class="u-clearfix u-sheet u-sheet-1">
+                                    <div class="u-clearfix u-gutter-0 u-layout-wrap u-layout-wrap-1">
+                                        <div class="u-layout">
+                                            <div class="u-layout-row">
+                                                <div class="u-container-style u-layout-cell u-size-12 u-layout-cell-1">
+
+                                                    <div class="u-container-layout u-valign-middle-lg u-valign-middle-sm u-valign-middle-xl u-container-layout-1">
+
+                                                        <i class="profile-dot" style="background-image: url('@Url.Content("~/Assets/user.png")')">
+
+                                                            <span>@qa.Initials</span>
+                                                        </i>
+                                                    </div>
+                                                </div>
+                                                <div class="u-container-style u-layout-cell u-size-48 u-layout-cell-2">
+                                                    <div class="u-container-layout u-container-layout-2">
+                                                        <h3 class="u-text u-text-default u-text-1">السؤال</h3>
+                                                        <h3 class="u-text u-text-default u-text-3">@qa.Subject</h3>
+                                                        <p class="text-muted"> نشر في <small>@qa.DateInHijri</small></p>
+                                                        <p class="text-muted"> الموافق <small>@qa.PublishingDate.ToString("yyyy-MM-dd", new CultureInfo("ar-AE"))</small></p>
+                                                        @if (!String.IsNullOrWhiteSpace(qa.CaseNumber))
+                                                        {
+                                                            <h4 class="text-dark"> رقم السؤال :<small> @qa.CaseNumber</small> </h4>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <h4 class="text-dark"> رقم السؤال :<small> xxxxxx</small> </h4>
+                                                        }
+
+                                                        <p class="u-text u-text-default u-text-2">
+
+                                                            @qa.Question
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="u-clearfix u-expanded-width u-layout-wrap u-layout-wrap-2">
+                                        <div class="u-layout">
+                                            <div class="u-layout-row">
+                                                <div class="u-container-style u-layout-cell u-size-48 u-layout-cell-3">
+                                                    <div class="u-container-layout u-container-layout-3">
+                                                        <h3 class="u-text u-text-default u-text-1">الإجابة</h3>
+                                                        <p class="u-text u-text-default u-text-4">
+
+                                                            @if (qa.Answered)
+                                                            {
+                                                                @Html.Raw(qa.Answer)
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>ستتم الإجابة بأسرع وقت إن شاء الله</span>
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="u-container-style u-layout-cell u-size-12 u-layout-cell-4">
+                                                    <div class="u-container-layout u-valign-middle u-container-layout-4">
+                                                        <img class="u-image u-image-circle u-image-2" src="/Assets/logo.png" alt="" data-image-width="400" data-image-height="265">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+            <div class="form-group mt-2">
+                <a class="btn btn-secondary" asp-controller="FBooks" asp-action="Details" asp-route-id="@Model.FBookId">العودة</a>
+            </div>
+
+            <div class="mt-3">
+                @(await Component.InvokeAsync<PaginationViewComponent>(Model.QAs))
+            </div>
+        }
+        else if (Model.Type == "Sections")
+        {
+
+            <div class="sections-wrapper">
+
+                <div class="sections-cols">
+                    @foreach (var item in Model.Sections.Results)
+                    {
+
+                        <div class="sections-col" ontouchstart="this.classList.toggle('hover');">
+                            <div class="sections-container">
+                                <div class="sections-front">
+                                    <div class="sections-inner">
+                                        <p>@item.Title</p>
+
+                                    </div>
+                                </div>
+                                <a class="sections-anchor" asp-controller="Sections" asp-action="Details" asp-route-id="@item.Id">
+                                    <div class="sections-back">
+                                        <div class="sections-inner">
+                                            <p class="sections-back-paragraph">@item.Description</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+                                {
+                                    <div class="text-center mt-3">
+
+                                        <span>
+                                            <a asp-controller="Sections" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit me-1"></i> </a>
+                                            <a asp-controller="Sections" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash me-1"></i></a>
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+            <div class="form-group mt-2">
+
+                <a class="btn btn-secondary" asp-controller="FBooks" asp-action="Details" asp-route-id="@Model.FBookId">العودة</a>
+            </div>
+
+            <div class="mt-3">
+                @(await Component.InvokeAsync<PaginationViewComponent>(Model.Sections))
+            </div>
+
+        }
+
+
+    }
+    else
+    {
+        <div class="sections-wrapper">
+
+            <div class="sections-cols">
+                @foreach (var item in Model.Sections.Results)
+                {
+
+                    <div class="sections-col" ontouchstart="this.classList.toggle('hover');">
+                        <div class="sections-container">
+                            <div class="sections-front">
+                                <div class="sections-inner">
+                                    <p>@item.Title</p>
+
+                                </div>
+                            </div>
+                            <a class="sections-anchor" asp-controller="Sections" asp-action="Details" asp-route-id="@item.Id">
+                                <div class="sections-back">
+                                    <div class="sections-inner">
+                                        <p class="sections-back-paragraph">@item.Description</p>
+                                    </div>
+                                </div>
+                            </a>
+                            @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+                            {
+                                <div class="text-center mt-3">
+
+                                    <span>
+                                        <a asp-controller="Sections" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit me-1"></i> </a>
+                                        <a asp-controller="Sections" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash me-1"></i></a>
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div>
+
+            @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+            {
+                <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@Model.FBookId">تعديل القسم</a>
+            }
+            <a class="btn btn-secondary" asp-action="Index">العودة إلى الرئيسية</a>
+        </div>
+
+        <div class="mt-3">
+            @(await Component.InvokeAsync<PaginationViewComponent>(Model.Sections))
+        </div>
+
+    }
+</div>
+
+
+
+   @* <div class="sections-cols">
+
+
+        @foreach (var item in Model.SectionsResult.Results)
+        {
+
+            <div class="sections-col" ontouchstart="this.classList.toggle('hover');">
+                <div class="sections-container">
+                    <div class="sections-front">
+                        <div class="sections-inner">
+                            <p>@item.Title</p>
+                        </div>
+                    </div>
+                    <a class="sections-anchor" asp-controller="Sections" asp-action="Details" asp-route-id="@item.Id">
+                        <div class="sections-back">
+                            <div class="sections-inner">
+                                <p class="sections-back-paragraph">@item.Description</p>
+                            </div>
+                        </div>
+                    </a>
+                    @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+                    {
+                        <div class="text-center mt-3">
+                            <span>
+                                <a asp-controller="Sections" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-edit me-1"></i> </a>
+                                <a asp-controller="Sections" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash me-1"></i></a>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>*@
+@*
+<div class="mt-3">
+    @(await Component.InvokeAsync<PaginationViewComponent>(Model.SectionsResult))
+</div>
+
+<div>
+
+    @if (User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Admin))
+    {
+        <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@Model.FBookId">تعديل القسم</a>
+    }
+    <a class="btn btn-secondary" asp-action="Index">العودة إلى الرئيسية</a>
+</div>*@

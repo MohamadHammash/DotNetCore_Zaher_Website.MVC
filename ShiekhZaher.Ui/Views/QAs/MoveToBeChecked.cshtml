@@ -1,0 +1,24 @@
+﻿@model MoveQAViewModel
+
+@{
+    ViewData["Title"] = "إخفاء سؤال";
+
+}
+<input type="hidden" asp-for="Id" />
+<h1 class="text-danger">هل أنت متأكد من أنك تريد إخفاء السؤال ؟</h1>
+
+<div class="container">
+    <div>
+        <p>
+            السؤال سأله الأخ/ت <span>@($"{Model.FirstName} {Model.LastName}")</span> بتاريخ <span>@Model.PublishingDate.ToString("yyyy-MM-dd hh:mm tt", new CultureInfo("ar-AE"))</span>
+        </p>
+    </div>
+</div>
+
+<form asp-action="MoveToBeChecked">
+    <span>
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="إخفاء" class="btn btn-danger" />
+        <a class="btn btn-secondary" asp-controller="Fbooks" asp-action="Index">العودة إلى الرئيسية</a>
+    </span>
+</form>

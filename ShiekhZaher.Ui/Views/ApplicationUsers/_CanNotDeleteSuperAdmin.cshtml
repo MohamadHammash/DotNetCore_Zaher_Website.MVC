@@ -1,0 +1,15 @@
+﻿@model DeleteApplicationUserViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "خطأ";
+}
+
+<div class="text-center text-danger h1 mt-5">
+    <p>
+        لا يمكن حذف هذا العنصر
+    </p>
+</div>
+
+<div class="form-group mt-2">
+    <a class="btn btn-secondary" asp-controller="ApplicationUsers" asp-action="Index">العودة إلى القائمة </a>
+</div>

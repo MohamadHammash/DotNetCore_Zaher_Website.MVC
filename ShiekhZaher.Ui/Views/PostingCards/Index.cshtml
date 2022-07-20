@@ -1,0 +1,115 @@
+﻿@model PaginationResult<ListPostingCardsViewModel>
+
+@{
+    ViewData["Title"] = "البطاقات الدعوية";
+}
+
+
+@if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Editor))
+{
+    
+<div class="row mt-3">
+    <div class="col-12 text-center">
+
+        <p>
+            <a class="btn btn-xl btn-primary" asp-action="Create">انشاء بطاقة جديدة</a>
+        </p>
+    </div>
+</div>
+}
+
+<section class="search-sec ms-5 mt-3">
+    <div class="container">
+        <form>
+
+            <div class="row justify-content-center align-items-center">
+
+                <div class="col-12  justify-content-center">
+                    <div class="row justify-content-center">
+                        <div class="col-11  p-0">
+                            <input name="search" type="text" class="form-control  search-slt" placeholder="ابحث عن بطاقة">
+                        </div>
+                        <div class="col-1 p-0">
+                            <button type="submit" class="btn btn-primary wrn-btn">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section class="cards-wrapper">
+
+    @foreach (var item in Model.Results)
+    {
+
+        <div class="card-grid-space">
+
+            @{
+                var path = (String.IsNullOrWhiteSpace(item.ImagePath) ? $"~/Assets/tawoos.jpeg" : $"~/Uploads/{item.ImagePath}");
+            }
+
+            <a class="card-posting-link posting-links" asp-action="details" asp-route-id="@item.Id" style="--bg-img: url('@Url.Content(path)')">
+
+                <div>
+
+                    @if (!String.IsNullOrWhiteSpace(item.Header))
+                    {
+
+                        <h1>@item.Header</h1>
+                    }
+                    else
+                    {
+                        <h1>لا يوجد عنوان</h1>
+                    }
+
+                    @if (String.IsNullOrWhiteSpace(item.Content) || String.IsNullOrWhiteSpace(item.StrippedContent))
+                    {
+                        <p>لا يوجد محتوى</p>
+                    }
+                    else
+                    {
+
+                        <p>
+                            @if (item.StrippedContent.Length >= 25)
+                            {
+                                @item.StrippedContent.Substring(0, 25)
+                            }
+                            else
+                            {
+                                @item.StrippedContent.Substring(0, item.StrippedContent.Count() - 1)
+                            }
+                            ...  <small class="text-muted"> اقرأ المقال</small>
+                        </p>
+                    }
+
+                    <div class="date">@item.DateInHijri </div>
+                    @if (item.New)
+                    {
+                        <div class="tags">
+                            <div class="tag">جديد</div>
+                        </div>
+                    }
+                </div>
+            </a>
+            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.SuperAdmin) || User.IsInRole(Roles.Editor))
+	{
+            <div class="pcards-fa-div">
+                <span>
+
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="me-4 fas fa-edit"></i></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                </span>
+            </div>
+	}
+
+        </div>
+    }
+</section>
+
+<div class="mt-3">
+    @(await Component.InvokeAsync<PaginationViewComponent>(Model))
+</div>

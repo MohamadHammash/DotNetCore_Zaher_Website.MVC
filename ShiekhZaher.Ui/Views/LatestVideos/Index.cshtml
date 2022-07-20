@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ListLatestVideo>
+
+@{
+    ViewData["Title"] = "أحدث المقاطع";
+}
+
+<div class="row justify-content-center mt-5">
+
+    @foreach (var video in Model)
+    {
+        var videoId = video.Link.Split('=').Last();
+        <div class="col-lg-4 col-md-6 my-3 col-sm-10">
+            <div class="card videos-card">
+                <iframe src="https://www.youtube.com/embed/@videoId" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+                <div class="card-body">
+                    <p class="card-text">@video.Title </p>
+                    <span class="text-muted">@video.DateInHijri</span>
+                    <label asp-for="@video.PubDate" class="text-muted"></label>
+                    <a href="@video.Link" target="_blank" class="btn btn-primary">شاهد على يوتيوب</a>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>

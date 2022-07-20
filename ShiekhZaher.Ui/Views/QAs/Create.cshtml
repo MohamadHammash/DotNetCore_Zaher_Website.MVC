@@ -1,0 +1,108 @@
+﻿@model CreateQAViewModel
+
+@{
+    ViewData["Title"] = "إرسال سؤال";
+
+}
+
+<div class="container">
+    <form asp-action="Create" id="qa-submit-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <script type="text/javascript">
+                function LimtCharacters(txtMsg, CharLength, indicator) {
+                    chars = txtMsg.value.length;
+                    document.getElementById(indicator).innerHTML = CharLength - chars;
+                    if (chars > CharLength) {
+                        txtMsg.value = txtMsg.value.substring(0, CharLength);
+                    }
+                }
+        </script>
+        <div class="mb-3 mt-5 rtl-direction">
+            <label asp-for="FirstName" class="form-label"></label>
+            <input asp-for="FirstName" type="text" class="form-control" id="create-questioner-name" placeholder="ليس بالضرورة ذكر الاسم الحقيقي لكن لتميير السؤال">
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3 rtl-direction">
+            <label asp-for="LastName" class="form-label"></label>
+            <input asp-for="LastName" type="text" class="form-control" id="create-questioner-lastname" placeholder="ليس بالضرورة ذكر الكنية الحقيقية لكن لتميير السؤال">
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="mb-3 rtl-direction">
+            <label asp-for="Subject" class="form-label"></label>
+            <input asp-for="Subject" type="text" class="form-control" id="create-question-subject" placeholder="السؤال يتعلق بأحكام؟">
+            <span asp-validation-for="Subject" class="text-danger"></span>
+        </div>
+        <div class="mb-3 rtl-direction">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" type="email" class="form-control" id="create-questioner-email" placeholder="لاستلام إشعار عند الإجابة ( اختياري )">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 rtl-direction">
+            <label asp-for="Question" class="form-label"></label>
+            <textarea asp-for="Question" class="form-control" id="create-question" rows="3" onkeyup="LimtCharacters(this,999,'create-remaining-chars');"></textarea>
+            <span asp-validation-for="Question" class="text-danger"></span>
+            <p class="p-remaining-chars"> الحروف المتبقية : <span id="create-remaining-chars">999</span></p>
+        </div>
+        <input id="qa-submit-btn" class="btn btn-primary" type="submit" value="أرسل السؤال" />
+        @if (Model.SectionId is not null)
+        {
+            <a asp-controller="Sections" asp-action="Details" asp-route-id="@Model.SectionId" class="btn btn-secondary">العودة إلى الأسئلة</a>
+        }
+        else
+        {
+            <a asp-controller="FBooks" asp-action="Index" class="btn btn-secondary">العودة إلى الرئيسية</a>
+        }
+    </form>
+</div>
+
+
+@*
+
+<script>
+
+
+    $('#qa-submit-form').submit(function () {
+    if ($(this).find('.input-validation-error').length == 0) {
+    
+        $(this).find(':submit').val('يتم الإرسال .. الرجاء الانتظار');
+        $(this).find(':submit').attr('disabled', 'disabled');
+    }
+});
+
+</script>*@
+
+
+
+@*
+@using (Html.BeginForm("Create", "QAs", FormMethod.Post, 
+new { onsubmit = "return submitForm();" }))
+{ 
+	// here are my fields
+}*@
+@*
+<script type="text/javascript">
+let isSubmitted = false;
+function stopMultipleSubmit() {
+		if (!isSubmitted) {
+			$('#qaSubmitBtn').val('يتم الإرسال .. الرجاء الانتظار');
+			$("#qaSubmitBtn").prop('disabled', true);
+			isSubmitted = true;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+    function submitForm() {
+        stopMultipleSubmit();
+    return isSubmitted;
+}
+
+
+</script>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

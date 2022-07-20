@@ -1,0 +1,48 @@
+﻿@model CreatePostingCardViewModel
+
+@{
+    ViewData["Title"] = "انشاء بطاقة";
+    //Layout = "_CreatePCardLayout";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group rtl-direction my-3">
+                <label asp-for="Header" class="control-label"></label>
+                <input asp-for="Header" class="form-control" />
+                <span asp-validation-for="Header" class="text-danger"></span>
+            </div>
+
+            <div class="form-group rtl-direction my-3">
+                <label asp-for="Content" class="control-label"></label>
+                <textarea asp-for="Content" rows="5" cols="40" id="content-create"></textarea>
+                <script type="text/javascript">
+                    CKEDITOR.replace('content-create');
+                </script>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <input class="uploadFile-disabled" placeholder="قم باختيار صورة" disabled="disabled" />
+            <div class="fileUpload btn btn-secondary">
+                <label asp-for="Photo" class="control-label"></label>
+                <span>اختر صورة</span>
+                <input asp-for="Photo" accept="image/*" class="upload" />
+            </div>
+            <div>
+                <span asp-validation-for="Photo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-2">
+                <input type="submit" value="إضافة" class="btn btn-primary" />
+                <a class="btn btn-secondary" asp-action="Index">العودة إلى قائمة البطاقات</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
